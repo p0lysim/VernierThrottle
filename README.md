@@ -1,22 +1,260 @@
-# Vernier Throttle Controller
+<h1 align="center">Vernier Throttle</h1>
 
-![Vernier Throttle Build](img/throttle.png)
+<p align="center">
+  <b>An open-source, 3D-printed push-pull vernier throttle for flight simulators, designed for ultralight and light aircraft.</b><br>
+  Push or pull for coarse power · twist the knob for fine tuning · USB game controller · Arduino Micro + AS5600
+</p>
 
-Compact firmware that fuses an AS5600 magnetic encoder with a linear potentiometer to expose a stable USB throttle axis via the Arduino Joystick Library. Works on any ATmega32u4-style board flashed through PlatformIO.
+<p align="center">
+  <img src="https://img.shields.io/badge/hardware-CC%20BY--NC--SA%204.0-lightgrey" alt="Hardware license: CC BY-NC-SA 4.0">
+  <img src="https://img.shields.io/badge/code-MIT-blue" alt="Code license: MIT">
+  <img src="https://img.shields.io/badge/board-Arduino%20Micro%20(ATmega32u4)-00979D" alt="Board: Arduino Micro (ATmega32u4)">
+  <img src="https://img.shields.io/badge/interface-USB%20HID-8A2BE2" alt="Interface: USB HID, no driver">
+  <img src="https://img.shields.io/badge/3D%20printed-yes-2ea44f" alt="3D printed">
+</p>
 
-3d files available here : https://www.printables.com/model/1512300-vernier-throttle-for-flight-sim
+<p align="center">
+  <img src="docs/images/render-hero.png" width="420" alt="3D render of the vernier throttle with its desk clamp, push-pull knob and clamp screw">
+  &nbsp;
+  <img src="docs/images/photos/real-throttle.png" width="250" alt="Printed vernier throttle prototype held in hand">
+</p>
 
-## Quick Facts
-- Runs on Arduino Pro Micro/Leonardo class boards with native USB HID.
-- Build + flash with PlatformIO: `pio run` then `pio run -t upload`.
+<p align="center">
+  <!-- TODO: replace with the MakerWorld model URL -->
+  <a href="https://makerworld.com/"><img src="https://img.shields.io/badge/MakerWorld-Download-00AE42?style=for-the-badge" alt="Download on MakerWorld"></a>
+  <a href="https://www.printables.com/model/1512300-vernier-throttle-for-flight-sim"><img src="https://img.shields.io/badge/Printables-Download-FA6831?style=for-the-badge" alt="Download on Printables"></a>
+  <!-- TODO: replace with the Thingiverse thing URL -->
+  <a href="https://www.thingiverse.com/"><img src="https://img.shields.io/badge/Thingiverse-Download-248BFB?style=for-the-badge" alt="Download on Thingiverse"></a>
+</p>
 
-## Hardware
-| Part | Hookup |
-| --- | --- |
-| AS5600 encoder | I2C `SDA`/`SCL`, address `0x36`. |
-| Linear potentiometer | Analog pin `A5` (editable in `src/main.cpp`). |
-| MCU | ATmega32u4 board for HID; USB cable powers + carries data. |
+<p align="center">
+  <a href="#-bill-of-materials">Bill of materials</a> ·
+  <a href="#-assembly-guide">Assembly guide</a> ·
+  <a href="hardware/stl">STL files on GitHub</a>
+</p>
 
+---
 
-## License
-See `LICENSE` for full terms.
+## Table of contents
+
+- [Highlights](#-highlights)
+- [How it works](#%EF%B8%8F-how-it-works)
+- [Specifications](#-specifications)
+- [Bill of materials](#-bill-of-materials)
+- [Assembly guide](#-assembly-guide)
+- [Electronics and firmware](#-electronics-and-firmware)
+- [Using it in a simulator](#-using-it-in-a-simulator)
+- [License](#-license)
+
+## ✨ Highlights
+
+- **Feels like the real control.** Push or pull the knob for large throttle changes. Twist it for fine
+  adjustments: one turn moves the throttle by about **10 %**.
+- **Idle and full power are always at the stops.** The firmware blends the fine adjustment out as the
+  knob approaches its stops. Fully pulled out is always 0 %, and fully pushed in is always 100 %.
+- **No driver.** It shows up as a standard USB game controller with a single throttle axis. Any simulator
+  that can bind a joystick axis can use it.
+- **Built-in desk clamp.** The body sits under the edge of the desk, with the knob facing you. You tighten a
+  thumb screw from the top of the desk.
+- **Simple electronics.** One Arduino Micro, one AS5600 magnetic encoder and one rotary potentiometer. No
+  custom PCB.
+- **Remixable.** The full CAD model (STEP) and a ready-to-print Bambu Studio project are included.
+
+## ⚙️ How it works
+
+<p align="center">
+  <img src="docs/images/mechanism.png" width="640" alt="Internal mechanism: steel rod, rack slider, herringbone pinion on the potentiometer and AS5600 holder">
+</p>
+
+An 8 mm steel rod runs from the knob to the back of the case and does two jobs:
+
+| You… | What moves | Sensor | Effect |
+|---|---|---|---|
+| **push / pull** the knob | the rod pushes the **rack slider** (orange), which turns the **herringbone pinion** (blue) | rotary potentiometer under the pinion | coarse throttle, full range |
+| **twist** the knob | the rod turns and so does the **magnet** on its rear end | **AS5600** magnetic encoder in the holder (green), which moves with the slider | fine throttle, ≈ 10 % per turn |
+
+The firmware adds both inputs together. When you move the lever after a fine adjustment, the output is
+scaled so that it still reaches exactly 0 % and 100 % at the stops. The maths and some tuning tips are in
+[docs/how-it-works.md](docs/how-it-works.md).
+
+## 📐 Specifications
+
+| | |
+|---|---|
+| Output | 1 axis (USB HID *Throttle*), 10-bit (0–1023) |
+| Coarse sensor | Rotary potentiometer, driven by a rack and a herringbone pinion |
+| Fine sensor | AS5600, 12-bit magnetic encoder (I²C) |
+| Fine adjustment | 1 knob turn ≈ 10 % of the throttle range |
+| Board | Arduino Micro (ATmega32u4, native USB) |
+| Mounting | Built-in C-clamp, desks about 30 to 65 mm thick |
+| Size | ≈ 300 × 116 × 230 mm (length without the knob × width of the clamp × height with the clamp screw) |
+
+## 🧾 Bill of materials
+
+### Printed parts (21 files, 22 pieces)
+
+The quantity is in each file name (`_x2` means print it twice). The same files are on
+<!-- TODO: replace with the MakerWorld model URL -->
+[MakerWorld](https://makerworld.com/),
+[Printables](https://www.printables.com/model/1512300-vernier-throttle-for-flight-sim) and
+<!-- TODO: replace with the Thingiverse thing URL -->
+[Thingiverse](https://www.thingiverse.com/).
+
+| | File | Qty | Role |
+|:-:|---|:-:|---|
+| <img src="docs/images/parts/Bottom_Shell.png" width="80"> | [`Bottom_Shell_x1.stl`](hardware/stl/Bottom_Shell_x1.stl) | 1 | Lower half of the case, with the slider channel |
+| <img src="docs/images/parts/Top_Shell.png" width="80"> | [`Top_Shell_x1.stl`](hardware/stl/Top_Shell_x1.stl) | 1 | Upper half of the case, carries the clamp |
+| <img src="docs/images/parts/Front_Plate.png" width="80"> | [`Front_Plate_x1.stl`](hardware/stl/Front_Plate_x1.stl) | 1 | Front of the case, the rod goes through it |
+| <img src="docs/images/parts/Front_Nut.png" width="80"> | [`Front_Nut_x1.stl`](hardware/stl/Front_Nut_x1.stl) | 1 | Hex bushing on the front plate, guides the rod |
+| <img src="docs/images/parts/Back_Plate.png" width="80"> | [`Back_Plate_x1.stl`](hardware/stl/Back_Plate_x1.stl) | 1 | Back of the case, opening for the USB cable |
+| <img src="docs/images/parts/Knob.png" width="80"> | [`Knob_x1.stl`](hardware/stl/Knob_x1.stl) | 1 | Throttle knob on the front end of the rod |
+| <img src="docs/images/parts/Rack_Slider.png" width="80"> | [`Rack_Slider_x1.stl`](hardware/stl/Rack_Slider_x1.stl) | 1 | Slider with a herringbone rack, follows the push/pull motion |
+| <img src="docs/images/parts/Pinion_Gear.png" width="80"> | [`Pinion_Gear_x1.stl`](hardware/stl/Pinion_Gear_x1.stl) | 1 | Herringbone pinion on the 6 mm potentiometer shaft |
+| <img src="docs/images/parts/Pot_Bracket.png" width="80"> | [`Pot_Bracket_x1.stl`](hardware/stl/Pot_Bracket_x1.stl) | 1 | Holds the potentiometer under the pinion |
+| <img src="docs/images/parts/AS5600_Holder_P1.png" width="80"> | [`AS5600_Holder_P1_x1.stl`](hardware/stl/AS5600_Holder_P1_x1.stl) | 1 | AS5600 holder, half 1 |
+| <img src="docs/images/parts/AS5600_Holder_P2.png" width="80"> | [`AS5600_Holder_P2_x1.stl`](hardware/stl/AS5600_Holder_P2_x1.stl) | 1 | AS5600 holder, half 2 |
+| <img src="docs/images/parts/Magnet_End_Cap.png" width="80"> | [`Magnet_End_Cap_x1.stl`](hardware/stl/Magnet_End_Cap_x1.stl) | 1 | Holds the diametric magnet on the rear end of the rod |
+| <img src="docs/images/parts/Shaft_Collar.png" width="80"> | [`Shaft_Collar_x2.stl`](hardware/stl/Shaft_Collar_x2.stl) | 2 | Locks the rod in the slider along its axis and lets it turn |
+| <img src="docs/images/parts/Arduino_Rail.png" width="80"> | [`Arduino_Rail_x1.stl`](hardware/stl/Arduino_Rail_x1.stl) | 1 | Arduino Micro mount at the back of the case |
+| <img src="docs/images/parts/Clamp_Left.png" width="80"> | [`Clamp_Left_x1.stl`](hardware/stl/Clamp_Left_x1.stl) | 1 | Left side of the C-clamp |
+| <img src="docs/images/parts/Clamp_Center.png" width="80"> | [`Clamp_Center_x1.stl`](hardware/stl/Clamp_Center_x1.stl) | 1 | Center of the C-clamp, with the thread for the clamp screw |
+| <img src="docs/images/parts/Clamp_Right.png" width="80"> | [`Clamp_Right_x1.stl`](hardware/stl/Clamp_Right_x1.stl) | 1 | Right side of the C-clamp |
+| <img src="docs/images/parts/Clamp_Screw.png" width="80"> | [`Clamp_Screw_x1.stl`](hardware/stl/Clamp_Screw_x1.stl) | 1 | Thumb screw of the clamp |
+| <img src="docs/images/parts/Clamp_Pad.png" width="80"> | [`Clamp_Pad_x1.stl`](hardware/stl/Clamp_Pad_x1.stl) | 1 | Pad that presses on the desk |
+| <img src="docs/images/parts/Clamp_Swivel_Disc.png" width="80"> | [`Clamp_Swivel_Disc_x1.stl`](hardware/stl/Clamp_Swivel_Disc_x1.stl) | 1 | Disc on the tip of the screw, turns freely inside the pad |
+| <img src="docs/images/parts/Clamp_Pad_Cover.png" width="80"> | [`Clamp_Pad_Cover_x1.stl`](hardware/stl/Clamp_Pad_Cover_x1.stl) | 1 | Closes the disc inside the pad |
+
+**Printing.** A ready-to-print Bambu Studio project for the Bambu Lab P2S is in
+[`hardware/3mf/`](hardware/3mf). The two shells are 270 mm long: on a 256 × 256 mm bed, they fit
+diagonally. Print the rack and the pinion with a fine layer height for a smooth mesh.
+
+### Mechanical hardware
+
+| Item | Qty | Where |
+|---|:-:|---|
+| Steel rod **Ø 8 mm**, cut to ≈ 300 mm | 1 | From the knob to the AS5600 holder |
+| M3 self-tapping screws (for plastic), assorted lengths | 1 kit | Case, plates, clamp |
+
+### Electronics
+
+| Item | Qty | Notes |
+|---|:-:|---|
+| **Arduino Micro** (ATmega32u4) | 1 | Native USB is required. A Leonardo also works. A Pro Micro needs another analog pin, see [docs](docs/electronics-and-firmware.md#pro-micro) |
+| **AS5600** magnetic encoder board | 1 | Usually sold with a diametrically magnetized magnet |
+| Diametric magnet | 1 | Goes in the `Magnet_End_Cap`, centred over the AS5600 chip |
+| Rotary potentiometer, **linear (B), 10 kΩ, 6 mm shaft**, single turn | 1 | Fits the `Pot_Bracket` (anti-rotation tab in the notch) |
+| Flexible stranded wire | — | The AS5600 board moves with the slider, so leave a cable loop |
+| Micro-USB cable | 1 | Power and data |
+
+## 🔧 Assembly guide
+
+<p align="center">
+  <img src="docs/images/exploded-view.png" width="720" alt="Exploded view of the vernier throttle: case, slider mechanism, front and back plates, clamp and clamp screw">
+</p>
+
+In the pictures below, **orange** marks the printed parts added at that step. The steel rod is shown in
+light grey.
+
+### Step 1: Base
+
+<img src="docs/images/assembly/step-1-base.png" width="560" alt="Step 1: bottom shell with the potentiometer bracket, pinion and Arduino rail">
+
+- Mount the potentiometer in the `Pot_Bracket`, with its anti-rotation tab in the notch.
+- Screw the bracket into the `Bottom_Shell`, then press the `Pinion_Gear` onto the 6 mm potentiometer shaft.
+- Fit the `Arduino_Rail` at the back of the shell and mount the Arduino Micro on it, with the USB port
+  facing the back.
+
+### Step 2: Slider and sensor
+
+<img src="docs/images/assembly/step-2-slider-and-sensor.png" width="560" alt="Step 2: rod through the rack slider, collars, magnet end cap and AS5600 holder">
+
+- Slide the Ø 8 mm rod through the `Rack_Slider`. Lock it with the two `Shaft_Collar`s: the slider must
+  follow the rod when you push or pull it, but the rod must still turn freely.
+- Put the diametric magnet in the `Magnet_End_Cap` and fit the cap on the rear end of the rod.
+- Clamp the AS5600 board between `AS5600_Holder_P1` and `AS5600_Holder_P2`, with the chip facing the
+  magnet, and fix the holder behind the slider.
+- Lay the slider in the channel of the `Bottom_Shell`, with the rack teeth meshing with the pinion.
+- Solder flexible wires to the AS5600 board and leave a loop long enough for the full travel.
+
+### Step 3: Front and back plates
+
+<img src="docs/images/assembly/step-3-front-and-back.png" width="560" alt="Step 3: front plate with the hex nut on the rod, back plate at the rear">
+
+- Slide the `Front_Plate` over the rod and screw it to the front of the shell. Fit the `Front_Nut` on it.
+- Pass the USB cable through the opening of the `Back_Plate` and screw the plate to the back.
+
+### Step 4: Close the case
+
+<img src="docs/images/assembly/step-4-close-case.png" width="560" alt="Step 4: top shell closing the case">
+
+- Do the wiring now (see [Electronics and firmware](#-electronics-and-firmware)) and flash the firmware.
+- Close the case with the `Top_Shell` and screw it to the `Bottom_Shell`.
+- Check that the rod slides over its full travel and turns freely before you go further.
+
+### Step 5: Clamp frame
+
+<img src="docs/images/assembly/step-5-clamp-frame.png" width="560" alt="Step 5: three-part C-clamp frame on top of the case">
+
+- Join `Clamp_Left`, `Clamp_Center` and `Clamp_Right` with their puzzle joints and screws.
+- Screw the frame onto the front of the `Top_Shell`. The open side of the C faces the back.
+
+### Step 6: Clamp screw
+
+<img src="docs/images/assembly/step-6-clamp-screw.png" width="560" alt="Step 6: clamp screw, pad, swivel disc and pad cover">
+
+- Thread the `Clamp_Screw` into the `Clamp_Center` from the top.
+- Under the arm, fix the `Clamp_Swivel_Disc` on the tip of the screw and close it inside the `Clamp_Pad`
+  with the `Clamp_Pad_Cover`. The pad stays still while the screw turns, so it does not scratch the desk.
+
+### Step 7: Knob
+
+<img src="docs/images/assembly/step-7-knob.png" width="560" alt="Step 7: knob on the front end of the rod">
+
+- Press or glue the `Knob` on the front end of the rod.
+
+### Step 8: Mount it on the desk
+
+- Slide the desk edge into the clamp, between the lower jaw and the pad, with the knob towards you.
+- Tighten the thumb screw, plug in the USB cable and bind the throttle axis in your simulator.
+
+## 🔌 Electronics and firmware
+
+| From | To (Arduino Micro) |
+|---|---|
+| Potentiometer wiper | **A5** |
+| Potentiometer ends | 5V and GND (swap them if the axis is reversed) |
+| AS5600 VCC / GND | 5V / GND (check the voltage your board expects) |
+| AS5600 SDA / SCL | **D2** (SDA) / **D3** (SCL) |
+| AS5600 DIR | GND (do not leave it floating) |
+
+The firmware is a [PlatformIO](https://platformio.org/) project in [`firmware/`](firmware):
+
+```bash
+cd firmware
+pio run -t upload
+```
+
+The board appears as a USB game controller with one throttle axis. The wiring diagram, testing on Windows
+and troubleshooting are in [docs/electronics-and-firmware.md](docs/electronics-and-firmware.md).
+
+## 🎮 Using it in a simulator
+
+- Bind the device's **Throttle** axis to the engine throttle (for example *Throttle axis* in MSFS or
+  *Throttle* in X-Plane).
+- Keep the response curve **linear** and the dead zone at **0**. Otherwise the fine adjustment loses its
+  feel.
+- Plug the throttle in before you start the flight: the axis reads 0 % for about one second after it is
+  connected.
+
+<p align="center">
+  <img src="docs/images/photos/real-throttle.png" width="300" alt="Printed vernier throttle prototype">
+</p>
+
+## 📜 License
+
+- **Hardware** (STL, STEP, 3MF, images and documentation):
+  [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). You can share and remix it
+  for non-commercial use, with attribution, under the same license. See [LICENSE](LICENSE).
+- **Firmware** (`firmware/`): [MIT](firmware/LICENSE).
+- The bundled [Arduino Joystick Library](https://github.com/MHeironimus/ArduinoJoystickLibrary)
+  (`firmware/lib/ArduinoJoystickLibrary`) by Matthew Heironimus keeps its own LGPL license.
