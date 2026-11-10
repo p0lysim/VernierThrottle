@@ -58,20 +58,28 @@
   thumb screw from the top of the desk.
 - **Simple electronics.** One Arduino Micro, one AS5600 magnetic encoder and one rotary potentiometer. No
   custom PCB.
-- **Remixable.** The full CAD model (STEP) and a ready-to-print Bambu Studio project are included.
+- **Remixable.** The full CAD model (STEP, with the bought parts) is included.
 
 ## ⚙️ How it works
 
 <p align="center">
-  <img src="docs/images/mechanism.png" width="640" alt="Internal mechanism: steel rod, rack slider, herringbone pinion on the potentiometer and AS5600 holder">
+  <img src="docs/images/how-it-works.gif" width="640" alt="Animation of the mechanism: pushing the knob moves the rack slider and turns the pinion, twisting it fine-tunes the throttle, pulling it back to the stop always gives 0 %">
 </p>
 
 An 8 mm steel rod runs from the knob to the back of the case and does two jobs:
 
 | You… | What moves | Sensor | Effect |
 |---|---|---|---|
-| **push / pull** the knob | the rod pushes the **rack slider** (orange), which turns the **herringbone pinion** (blue) | rotary potentiometer under the pinion | coarse throttle, full range |
-| **twist** the knob | the rod turns and so does the **magnet** on its rear end | **AS5600** magnetic encoder in the holder (green), which moves with the slider | fine throttle, ≈ 10 % per turn |
+| **push / pull** the knob | the rod pushes the **rack slider** (orange), which turns the **herringbone pinion** (blue) | 10 kΩ rotary potentiometer under the pinion | coarse throttle, full range |
+| **twist** the knob | the rod turns and so does the small **magnet** glued on its rear end | **AS5600** magnetic encoder (purple board) on the back of the holder (green), which moves with the slider | fine throttle, ≈ 10 % per turn |
+
+In the animation, the bar on the left is the throttle value sent to the simulator, and the small mark next
+to it is the lever position. After a twist, the two no longer match, but pulling the knob back to its stop
+still gives exactly 0 %.
+
+<p align="center">
+  <img src="docs/images/mechanism.png" width="560" alt="Internal mechanism: steel rod, rack slider, herringbone pinion, AS5600 holder with the AS5600 board">
+</p>
 
 The firmware adds both inputs together. When you move the lever after a fine adjustment, the output is
 scaled so that it still reaches exactly 0 % and 100 % at the stops. The maths and some tuning tips are in
@@ -82,7 +90,7 @@ scaled so that it still reaches exactly 0 % and 100 % at the stops. The maths an
 | | |
 |---|---|
 | Output | 1 axis (USB HID *Throttle*), 10-bit (0–1023) |
-| Coarse sensor | Rotary potentiometer, driven by a rack and a herringbone pinion |
+| Coarse sensor | 10 kΩ rotary potentiometer, driven by a rack and a herringbone pinion (module 1.6, 20 teeth) |
 | Fine sensor | AS5600, 12-bit magnetic encoder (I²C) |
 | Fine adjustment | 1 knob turn ≈ 10 % of the throttle range |
 | Board | Arduino Micro (ATmega32u4, native USB) |
@@ -111,11 +119,11 @@ The quantity is in each file name (`_x2` means print it twice). The same files a
 | <img src="docs/images/parts/Rack_Slider.png" width="80"> | [`Rack_Slider_x1.stl`](hardware/stl/Rack_Slider_x1.stl) | 1 | Slider with a herringbone rack, follows the push/pull motion |
 | <img src="docs/images/parts/Pinion_Gear.png" width="80"> | [`Pinion_Gear_x1.stl`](hardware/stl/Pinion_Gear_x1.stl) | 1 | Herringbone pinion on the 6 mm potentiometer shaft |
 | <img src="docs/images/parts/Pot_Bracket.png" width="80"> | [`Pot_Bracket_x1.stl`](hardware/stl/Pot_Bracket_x1.stl) | 1 | Holds the potentiometer under the pinion |
-| <img src="docs/images/parts/AS5600_Holder_P1.png" width="80"> | [`AS5600_Holder_P1_x1.stl`](hardware/stl/AS5600_Holder_P1_x1.stl) | 1 | AS5600 holder, half 1 |
+| <img src="docs/images/parts/AS5600_Holder_P1.png" width="80"> | [`AS5600_Holder_P1_x1.stl`](hardware/stl/AS5600_Holder_P1_x1.stl) | 1 | AS5600 holder, half 1. The AS5600 board screws on its back face |
 | <img src="docs/images/parts/AS5600_Holder_P2.png" width="80"> | [`AS5600_Holder_P2_x1.stl`](hardware/stl/AS5600_Holder_P2_x1.stl) | 1 | AS5600 holder, half 2 |
-| <img src="docs/images/parts/Magnet_End_Cap.png" width="80"> | [`Magnet_End_Cap_x1.stl`](hardware/stl/Magnet_End_Cap_x1.stl) | 1 | Holds the diametric magnet on the rear end of the rod |
-| <img src="docs/images/parts/Shaft_Collar.png" width="80"> | [`Shaft_Collar_x2.stl`](hardware/stl/Shaft_Collar_x2.stl) | 2 | Locks the rod in the slider along its axis and lets it turn |
-| <img src="docs/images/parts/Arduino_Rail.png" width="80"> | [`Arduino_Rail_x1.stl`](hardware/stl/Arduino_Rail_x1.stl) | 1 | Arduino Micro mount at the back of the case |
+| <img src="docs/images/parts/Magnet_End_Cap.png" width="80"> | [`Magnet_End_Cap_x1.stl`](hardware/stl/Magnet_End_Cap_x1.stl) | 1 | Cap on the rear end of the rod, inside the AS5600 holder. Its rear pocket holds the Ø 5 × 2 mm magnet |
+| <img src="docs/images/parts/Shaft_Collar.png" width="80"> | [`Shaft_Collar_x2.stl`](hardware/stl/Shaft_Collar_x2.stl) | 2 | One at each end of the rack slider. They lock the slider on the rod along its axis |
+| <img src="docs/images/parts/Arduino_Rail.png" width="80"> | [`Arduino_Rail_x1.stl`](hardware/stl/Arduino_Rail_x1.stl) | 1 | Holds the Arduino Micro in its pocket at the back of the case |
 | <img src="docs/images/parts/Clamp_Left.png" width="80"> | [`Clamp_Left_x1.stl`](hardware/stl/Clamp_Left_x1.stl) | 1 | Left side of the C-clamp |
 | <img src="docs/images/parts/Clamp_Center.png" width="80"> | [`Clamp_Center_x1.stl`](hardware/stl/Clamp_Center_x1.stl) | 1 | Center of the C-clamp, with the thread for the clamp screw |
 | <img src="docs/images/parts/Clamp_Right.png" width="80"> | [`Clamp_Right_x1.stl`](hardware/stl/Clamp_Right_x1.stl) | 1 | Right side of the C-clamp |
@@ -124,95 +132,120 @@ The quantity is in each file name (`_x2` means print it twice). The same files a
 | <img src="docs/images/parts/Clamp_Swivel_Disc.png" width="80"> | [`Clamp_Swivel_Disc_x1.stl`](hardware/stl/Clamp_Swivel_Disc_x1.stl) | 1 | Disc on the tip of the screw, turns freely inside the pad |
 | <img src="docs/images/parts/Clamp_Pad_Cover.png" width="80"> | [`Clamp_Pad_Cover_x1.stl`](hardware/stl/Clamp_Pad_Cover_x1.stl) | 1 | Closes the disc inside the pad |
 
-**Printing.** A ready-to-print Bambu Studio project for the Bambu Lab P2S is in
-[`hardware/3mf/`](hardware/3mf). The two shells are 270 mm long: on a 256 × 256 mm bed, they fit
-diagonally. Print the rack and the pinion with a fine layer height for a smooth mesh.
+**Printing.** The two shells are 270 mm long: on a 256 × 256 mm bed, they fit diagonally. Print the
+rack and the pinion with a fine layer height for a smooth mesh. A ready-to-print Bambu Studio project for
+the Bambu Lab P2S will be added to [`hardware/3mf/`](hardware/3mf).
+
+**CAD.** The full Fusion assembly is available as STEP:
+[`Vernier_Throttle_V1.step`](hardware/step/Vernier_Throttle_V1.step) (the throttle, with the rod,
+potentiometer, Arduino Micro and AS5600 board) and
+[`Vernier_Throttle_Support.step`](hardware/step/Vernier_Throttle_Support.step) (the desk clamp).
 
 ### Mechanical hardware
 
 | Item | Qty | Where |
 |---|:-:|---|
-| Steel rod **Ø 8 mm**, cut to ≈ 300 mm | 1 | From the knob to the AS5600 holder |
-| M3 self-tapping screws (for plastic), assorted lengths | 1 kit | Case, plates, clamp |
+| Steel rod **Ø 8 × 313 mm** | 1 | From the knob to the AS5600 holder |
+| M3 self-tapping screws (for plastic), assorted lengths | 1 kit | Case, plates, clamp, AS5600 board |
+| Glue (cyanoacrylate or epoxy) | — | Collars, magnet end cap, magnet and knob on the rod |
 
 ### Electronics
 
 | Item | Qty | Notes |
 |---|:-:|---|
 | **Arduino Micro** (ATmega32u4) | 1 | Native USB is required. A Leonardo also works. A Pro Micro needs another analog pin, see [docs](docs/electronics-and-firmware.md#pro-micro) |
-| **AS5600** magnetic encoder board | 1 | Usually sold with a diametrically magnetized magnet |
-| Diametric magnet | 1 | Goes in the `Magnet_End_Cap`, centred over the AS5600 chip |
-| Rotary potentiometer, **linear (B), 10 kΩ, 6 mm shaft**, single turn | 1 | Fits the `Pot_Bracket` (anti-rotation tab in the notch) |
+| **AS5600** magnetic encoder board, square (≈ 23 × 23 mm, 4 mounting holes) | 1 | Screws on the back of the AS5600 holder |
+| Diametric magnet **Ø 5 × 2 mm** | 1 | Goes in the rear pocket of the `Magnet_End_Cap`, facing the AS5600 chip |
+| Rotary potentiometer, **10 kΩ**, linear taper, 6 mm shaft, single turn | 1 | Fits the `Pot_Bracket` (anti-rotation tab in the notch) |
 | Flexible stranded wire | — | The AS5600 board moves with the slider, so leave a cable loop |
 | Micro-USB cable | 1 | Power and data |
 
 ## 🔧 Assembly guide
 
 <p align="center">
-  <img src="docs/images/exploded-view.png" width="720" alt="Exploded view of the vernier throttle: case, slider mechanism, front and back plates, clamp and clamp screw">
+  <img src="docs/images/exploded-view.png" width="720" alt="Exploded view of the vernier throttle: case, slider mechanism with the AS5600 board, front and back plates, clamp and clamp screw">
 </p>
 
-In the pictures below, **orange** marks the printed parts added at that step. The steel rod is shown in
-light grey.
+In the pictures below, **orange** marks the printed parts added at that step. The bought parts are shown in
+their own colours: steel rod, potentiometer, Arduino Micro (teal), AS5600 board (purple) and the
+diametric magnet (red / blue).
 
-### Step 1: Base
+### Step 1: Potentiometer and pinion
 
-<img src="docs/images/assembly/step-1-base.png" width="560" alt="Step 1: bottom shell with the potentiometer bracket, pinion and Arduino rail">
+<img src="docs/images/assembly/step-1-potentiometer-detail.png" width="420" alt="Step 1 detail: potentiometer under the bracket, herringbone pinion on top"> <img src="docs/images/assembly/step-1-potentiometer.png" width="420" alt="Step 1: potentiometer bracket and pinion in the bottom shell">
 
-- Mount the potentiometer in the `Pot_Bracket`, with its anti-rotation tab in the notch.
-- Screw the bracket into the `Bottom_Shell`, then press the `Pinion_Gear` onto the 6 mm potentiometer shaft.
-- Fit the `Arduino_Rail` at the back of the shell and mount the Arduino Micro on it, with the USB port
-  facing the back.
+- Push the bushing of the 10 kΩ potentiometer up through the `Pot_Bracket`, with its anti-rotation tab in
+  the small notch, and tighten the potentiometer nut on top.
+- Press the `Pinion_Gear` onto the 6 mm potentiometer shaft.
+- Screw the bracket into the `Bottom_Shell`, under the slider channel.
+- Solder three wires to the potentiometer (see [Electronics and firmware](#-electronics-and-firmware)).
 
-### Step 2: Slider and sensor
+### Step 2: Arduino Micro
 
-<img src="docs/images/assembly/step-2-slider-and-sensor.png" width="560" alt="Step 2: rod through the rack slider, collars, magnet end cap and AS5600 holder">
+<img src="docs/images/assembly/step-2-arduino-detail.png" width="420" alt="Step 2 detail: Arduino Micro in its pocket, held by the Arduino rail"> <img src="docs/images/assembly/step-2-arduino.png" width="420" alt="Step 2: Arduino rail at the back of the bottom shell">
 
-- Slide the Ø 8 mm rod through the `Rack_Slider`. Lock it with the two `Shaft_Collar`s: the slider must
-  follow the rod when you push or pull it, but the rod must still turn freely.
-- Put the diametric magnet in the `Magnet_End_Cap` and fit the cap on the rear end of the rod.
-- Clamp the AS5600 board between `AS5600_Holder_P1` and `AS5600_Holder_P2`, with the chip facing the
-  magnet, and fix the holder behind the slider.
+- Drop the Arduino Micro into its pocket at the back of the `Bottom_Shell`, pins down, with the USB
+  connector facing the back.
+- Hold it in place with the `Arduino_Rail` and its screw.
+
+### Step 3: Rod and rack slider
+
+<img src="docs/images/assembly/step-3-rod-and-rack.png" width="560" alt="Step 3: steel rod through the rack slider, with a shaft collar at each end">
+
+- Slide the Ø 8 × 313 mm rod through the `Rack_Slider`.
+- Glue one `Shaft_Collar` against each end of the slider. The slider must follow the rod when you push or
+  pull it, and the rod must still turn freely inside it.
 - Lay the slider in the channel of the `Bottom_Shell`, with the rack teeth meshing with the pinion.
-- Solder flexible wires to the AS5600 board and leave a loop long enough for the full travel.
 
-### Step 3: Front and back plates
+### Step 4: AS5600 sensor and magnet
 
-<img src="docs/images/assembly/step-3-front-and-back.png" width="560" alt="Step 3: front plate with the hex nut on the rod, back plate at the rear">
+<img src="docs/images/assembly/step-4-sensor-detail.png" width="420" alt="Step 4 detail: AS5600 holder halves, magnet end cap, diametric magnet and AS5600 board on the rear end of the rod"> <img src="docs/images/assembly/step-4-sensor.png" width="420" alt="Step 4: AS5600 holder at the rear end of the rod, behind the rack slider">
+
+- Glue the Ø 5 × 2 mm diametric magnet in the rear pocket of the `Magnet_End_Cap`, then glue the cap on
+  the rear end of the rod, magnet facing backwards.
+- Close the two halves `AS5600_Holder_P1` and `AS5600_Holder_P2` around the rod, behind the rear collar.
+  The cap sits in the cavity at the back of the holder.
+- Screw the AS5600 board on the back face of the holder, **chip facing the magnet**. The holder now moves
+  with the slider, and the magnet turns in front of the chip when you twist the knob.
+- Solder flexible wires to the board and leave a loop long enough for the full travel.
+
+### Step 5: Front and back plates
+
+<img src="docs/images/assembly/step-5-front-and-back.png" width="560" alt="Step 5: front plate with the hex nut on the rod, back plate at the rear">
 
 - Slide the `Front_Plate` over the rod and screw it to the front of the shell. Fit the `Front_Nut` on it.
 - Pass the USB cable through the opening of the `Back_Plate` and screw the plate to the back.
 
-### Step 4: Close the case
+### Step 6: Close the case
 
-<img src="docs/images/assembly/step-4-close-case.png" width="560" alt="Step 4: top shell closing the case">
+<img src="docs/images/assembly/step-6-close-case.png" width="560" alt="Step 6: top shell closing the case">
 
-- Do the wiring now (see [Electronics and firmware](#-electronics-and-firmware)) and flash the firmware.
+- Finish the wiring (see [Electronics and firmware](#-electronics-and-firmware)) and flash the firmware.
 - Close the case with the `Top_Shell` and screw it to the `Bottom_Shell`.
 - Check that the rod slides over its full travel and turns freely before you go further.
 
-### Step 5: Clamp frame
+### Step 7: Clamp frame
 
-<img src="docs/images/assembly/step-5-clamp-frame.png" width="560" alt="Step 5: three-part C-clamp frame on top of the case">
+<img src="docs/images/assembly/step-7-clamp-frame.png" width="560" alt="Step 7: three-part C-clamp frame on top of the case">
 
 - Join `Clamp_Left`, `Clamp_Center` and `Clamp_Right` with their puzzle joints and screws.
 - Screw the frame onto the front of the `Top_Shell`. The open side of the C faces the back.
 
-### Step 6: Clamp screw
+### Step 8: Clamp screw
 
-<img src="docs/images/assembly/step-6-clamp-screw.png" width="560" alt="Step 6: clamp screw, pad, swivel disc and pad cover">
+<img src="docs/images/assembly/step-8-clamp-screw.png" width="560" alt="Step 8: clamp screw, pad, swivel disc and pad cover">
 
 - Thread the `Clamp_Screw` into the `Clamp_Center` from the top.
 - Under the arm, fix the `Clamp_Swivel_Disc` on the tip of the screw and close it inside the `Clamp_Pad`
   with the `Clamp_Pad_Cover`. The pad stays still while the screw turns, so it does not scratch the desk.
 
-### Step 7: Knob
+### Step 9: Knob
 
-<img src="docs/images/assembly/step-7-knob.png" width="560" alt="Step 7: knob on the front end of the rod">
+<img src="docs/images/assembly/step-9-knob.png" width="560" alt="Step 9: knob on the front end of the rod">
 
-- Press or glue the `Knob` on the front end of the rod.
+- Glue the `Knob` on the front end of the rod.
 
-### Step 8: Mount it on the desk
+### Step 10: Mount it on the desk
 
 - Slide the desk edge into the clamp, between the lower jaw and the pad, with the knob towards you.
 - Tighten the thumb screw, plug in the USB cable and bind the throttle axis in your simulator.

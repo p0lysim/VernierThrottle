@@ -3,7 +3,9 @@
 [← Back to the README](../README.md)
 
 <p align="center">
-  <img src="images/mechanism.png" width="560" alt="Mechanism: rod, rack slider, herringbone pinion and AS5600 holder">
+  <img src="images/how-it-works.gif" width="560" alt="Animation: push the knob, twist it for fine tuning, pull it back to the stop">
+  <br>
+  <img src="images/mechanism.png" width="560" alt="Mechanism: rod, rack slider, herringbone pinion, AS5600 holder and AS5600 board">
 </p>
 
 ## The vernier throttle
@@ -30,9 +32,14 @@ and added to the output by the firmware.
 
 - The **potentiometer is fixed** in the case. The rack converts the travel of the slider into a rotation
   of less than one turn, so a standard single-turn potentiometer covers the full travel.
-- The **AS5600 moves with the slider**, so the distance between the magnet and the chip stays the same
-  over the whole travel. Its wires need a loop.
-- The herringbone teeth keep the pinion centred on the rack and make the motion smooth.
+- Two **shaft collars**, one at each end of the slider, lock the slider on the rod along its axis. The rod
+  still turns freely inside it.
+- The **AS5600 holder** sits behind the rear collar. The **magnet end cap** glued on the rear end of the rod
+  sits in a cavity at the back of the holder, and the AS5600 board is screwed on the back face. The holder
+  therefore moves with the slider, so the distance between the magnet and the chip stays the same over the
+  whole travel. Its wires need a loop.
+- The herringbone teeth (module 1.6, 20-tooth pinion) keep the pinion centred on the rack and make the
+  motion smooth.
 
 ## Firmware
 

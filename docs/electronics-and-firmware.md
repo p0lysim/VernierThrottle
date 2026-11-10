@@ -7,8 +7,8 @@
 | Part | Notes |
 |---|---|
 | Arduino Micro (ATmega32u4, 16 MHz) | Native USB, required for the HID game controller. A Leonardo works too |
-| AS5600 board | 12-bit magnetic angle sensor, I²C address `0x36`, raw angle registers `0x0C`/`0x0D` |
-| Diametric magnet | Centred over the AS5600 chip, about 0.5 to 3 mm away |
+| AS5600 board | 12-bit magnetic angle sensor, I²C address `0x36`, raw angle registers `0x0C`/`0x0D`. Square board (≈ 23 × 23 mm, 4 holes) screwed on the back of the AS5600 holder |
+| Diametric magnet, Ø 5 × 2 mm | In the rear pocket of the `Magnet_End_Cap`, centred over the AS5600 chip, about 0.5 to 3 mm away |
 | Rotary potentiometer, linear (B), 10 kΩ, 6 mm shaft | Single turn, driven by the pinion |
 
 ## Wiring
@@ -31,7 +31,7 @@
 ```
 
 - The AS5600 board moves with the slider: use flexible stranded wire and leave a loop for the full travel
-  (about 90 mm).
+  of the knob.
 - If the axis goes the wrong way when you push, swap the two outer wires of the potentiometer.
 - If the fine adjustment goes the wrong way, tie DIR to the other supply rail, or remove the `*= -1` line
   in `main.cpp`.
