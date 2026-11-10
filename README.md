@@ -31,7 +31,8 @@
   <a href="#-bill-of-materials">Bill of materials</a> ·
   <a href="#-assembly-guide">Assembly guide</a> ·
   <a href="hardware/stl">STL files on GitHub</a> ·
-  <a href="hardware/step">STEP files</a>
+  <a href="hardware/step">STEP files</a> ·
+  <a href="hardware/3mf/Vernier_Throttle_Bambu_P2S.3mf">Bambu Studio project (P2S)</a>
 </p>
 
 ---
