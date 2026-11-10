@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1030 540" width="1030" height="540" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Vernier Throttle wiring diagram</title>
+  <rect x="1" y="1" width="1028" height="538" rx="14" fill="#ffffff" stroke="#d0d7de" stroke-width="2"/>
+
+  <!-- Device names -->
+  <g font-size="16" font-weight="700" fill="#24292f" text-anchor="middle">
+    <text x="150" y="38">Arduino Micro</text>
+    <text x="685" y="35">AS5600 board</text>
+    <text x="660" y="320">Potentiometer 10 kΩ</text>
+  </g>
+
+  <!-- Arduino Micro -->
+  <rect x="60" y="50" width="190" height="400" rx="10" fill="#1F7D8A" stroke="#155E68" stroke-width="2"/>
+  <rect x="225" y="70" width="18" height="360" rx="4" fill="#155E68"/>
+  <rect x="85" y="210" width="80" height="80" rx="4" fill="#1d2125"/>
+  <text x="125" y="254" font-size="10" fill="#ffffff" text-anchor="middle">ATmega32u4</text>
+  <rect x="125" y="450" width="50" height="20" rx="3" fill="#B8BEC6" stroke="#8a9099" stroke-width="1.5"/>
+  <path d="M150 470 V494" stroke="#57606a" stroke-width="4" stroke-linecap="round"/>
+  <text x="150" y="522" font-size="13" fill="#57606a" text-anchor="middle">USB to PC</text>
+
+  <!-- AS5600 board -->
+  <rect x="600" y="45" width="170" height="230" rx="10" fill="#7B4FC9" stroke="#5B379C" stroke-width="2"/>
+  <rect x="594" y="58" width="18" height="206" rx="4" fill="#5B379C"/>
+  <rect x="690" y="137" width="46" height="46" rx="3" fill="#1d2125"/>
+  <text x="713" y="163" font-size="9" fill="#ffffff" text-anchor="middle">AS5600</text>
+
+  <!-- Potentiometer -->
+  <rect x="585" y="341" width="17" height="8" fill="#8a9099"/>
+  <rect x="585" y="376" width="17" height="8" fill="#8a9099"/>
+  <rect x="585" y="411" width="17" height="8" fill="#8a9099"/>
+  <rect x="600" y="330" width="130" height="110" rx="10" fill="#A3A8B0" stroke="#7d838c" stroke-width="2"/>
+  <circle cx="690" cy="385" r="28" fill="#C9CED6" stroke="#7d838c" stroke-width="2"/>
+  <circle cx="690" cy="385" r="12" fill="#8a9099"/>
+  <path d="M684 385 H696" stroke="#C9CED6" stroke-width="3"/>
+
+  <!-- Wires -->
+  <g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M234 100 H603" stroke="#2F6FDE"/>
+    <path d="M234 130 H603" stroke="#E8912D"/>
+    <path d="M234 190 H603" stroke="#24292f"/>
+    <path d="M603 160 H575 V190" stroke="#24292f"/>
+    <path d="M234 280 H470 V250 H603" stroke="#D73A49"/>
+    <path d="M470 280 V345 H588" stroke="#D73A49"/>
+    <path d="M234 380 H588" stroke="#2DA44E"/>
+    <path d="M234 415 H588" stroke="#24292f"/>
+  </g>
+  <circle cx="575" cy="190" r="6" fill="#24292f"/>
+  <circle cx="470" cy="280" r="6" fill="#D73A49"/>
+
+  <!-- Wire labels -->
+  <g font-size="13" font-weight="600" text-anchor="middle">
+    <text x="400" y="92" fill="#2F6FDE">SDA</text>
+    <text x="400" y="122" fill="#E8912D">SCL</text>
+    <text x="400" y="182" fill="#24292f">GND</text>
+    <text x="350" y="272" fill="#D73A49">5V</text>
+    <text x="400" y="372" fill="#2DA44E">A5</text>
+    <text x="400" y="407" fill="#24292f">GND</text>
+  </g>
+
+  <!-- Pads -->
+  <g fill="#E6C34A" stroke="#7a5d00" stroke-width="1.5">
+    <circle cx="234" cy="100" r="6"/>
+    <circle cx="234" cy="130" r="6"/>
+    <circle cx="234" cy="190" r="6"/>
+    <circle cx="234" cy="280" r="6"/>
+    <circle cx="234" cy="380" r="6"/>
+    <circle cx="234" cy="415" r="6"/>
+    <circle cx="603" cy="100" r="6"/>
+    <circle cx="603" cy="130" r="6"/>
+    <circle cx="603" cy="160" r="6"/>
+    <circle cx="603" cy="190" r="6"/>
+    <circle cx="603" cy="250" r="6"/>
+  </g>
+  <g fill="none" stroke="#c9b6ee" stroke-width="1.5">
+    <circle cx="603" cy="70" r="5"/>
+    <circle cx="603" cy="220" r="5"/>
+  </g>
+
+  <!-- Pin labels -->
+  <g font-size="14" font-weight="600" fill="#ffffff" text-anchor="end">
+    <text x="218" y="105">D2 / SDA</text>
+    <text x="218" y="135">D3 / SCL</text>
+    <text x="218" y="195">GND</text>
+    <text x="218" y="285">5V</text>
+    <text x="218" y="385">A5</text>
+    <text x="218" y="420">GND</text>
+  </g>
+  <g font-size="14" font-weight="600" fill="#ffffff">
+    <text x="622" y="75" opacity="0.55">GPO</text>
+    <text x="622" y="105">SDA</text>
+    <text x="622" y="135">SCL</text>
+    <text x="622" y="165">DIR</text>
+    <text x="622" y="195">GND</text>
+    <text x="622" y="225" opacity="0.55">OUT</text>
+    <text x="622" y="255">VCC</text>
+  </g>
+  <g font-size="14" font-weight="600" fill="#24292f">
+    <text x="612" y="350">end</text>
+    <text x="612" y="385">wiper</text>
+    <text x="612" y="420">end</text>
+  </g>
+
+  <!-- Notes -->
+  <g font-size="13" fill="#57606a">
+    <text x="795" y="66">Flexible wires with a loop:</text>
+    <text x="795" y="84">the board moves with the slider</text>
+    <text x="795" y="156">DIR to GND,</text>
+    <text x="795" y="174">never leave it floating</text>
+    <text x="795" y="246">Check whether your board</text>
+    <text x="795" y="264">takes 5 V or 3.3 V</text>
+    <text x="795" y="376">Axis reversed?</text>
+    <text x="795" y="394">Swap the two ends</text>
+  </g>
+</svg>

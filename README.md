@@ -30,7 +30,8 @@
 <p align="center">
   <a href="#-bill-of-materials">Bill of materials</a> ·
   <a href="#-assembly-guide">Assembly guide</a> ·
-  <a href="hardware/stl">STL files on GitHub</a>
+  <a href="hardware/stl">STL files on GitHub</a> ·
+  <a href="hardware/step">STEP files</a>
 </p>
 
 ---
@@ -48,42 +49,19 @@
 
 ## ✨ Highlights
 
-- **Feels like the real control.** Push or pull the knob for large throttle changes. Twist it for fine
-  adjustments: one turn moves the throttle by about **10 %**.
-- **Idle and full power are always at the stops.** The firmware blends the fine adjustment out as the
-  knob approaches its stops. Fully pulled out is always 0 %, and fully pushed in is always 100 %.
-- **No driver.** It shows up as a standard USB game controller with a single throttle axis. Any simulator
-  that can bind a joystick axis can use it.
-- **Built-in desk clamp.** The body sits under the edge of the desk, with the knob facing you. You tighten a
-  thumb screw from the top of the desk.
-- **Simple electronics.** One Arduino Micro, one AS5600 magnetic encoder and one rotary potentiometer. No
-  custom PCB.
-- **Remixable.** The full CAD model (STEP, with the bought parts) is included.
+- **Feels like the real control:** push or pull for coarse power, twist the knob for fine tuning.
+- **Plug and play:** a standard USB game controller, no driver, works in any simulator.
+- **Easy to build:** printed parts, an Arduino Micro, an AS5600 and a potentiometer. No custom PCB.
 
 ## ⚙️ How it works
 
 <p align="center">
   <img src="docs/images/how-it-works.gif" width="640" alt="Animation of the mechanism: pushing the knob moves the rack slider and turns the pinion, twisting it fine-tunes the throttle, pulling it back to the stop always gives 0 %">
+  <br>
+  <b>Push or pull</b> the knob: the rack turns a potentiometer for the coarse throttle.
+  <br>
+  <b>Twist</b> it: an AS5600 reads a magnet on the rod for fine tuning, about 10 % per turn (<a href="docs/how-it-works.md">details</a>).
 </p>
-
-An 8 mm steel rod runs from the knob to the back of the case and does two jobs:
-
-| You… | What moves | Sensor | Effect |
-|---|---|---|---|
-| **push / pull** the knob | the rod pushes the **rack slider** (orange), which turns the **herringbone pinion** (blue) | 10 kΩ rotary potentiometer under the pinion | coarse throttle, full range |
-| **twist** the knob | the rod turns and so does the small **magnet** glued on its rear end | **AS5600** magnetic encoder (purple board) on the back of the holder (green), which moves with the slider | fine throttle, ≈ 10 % per turn |
-
-In the animation, the bar on the left is the throttle value sent to the simulator, and the small mark next
-to it is the lever position. After a twist, the two no longer match, but pulling the knob back to its stop
-still gives exactly 0 %.
-
-<p align="center">
-  <img src="docs/images/mechanism.png" width="560" alt="Internal mechanism: steel rod, rack slider, herringbone pinion, AS5600 holder with the AS5600 board">
-</p>
-
-The firmware adds both inputs together. When you move the lever after a fine adjustment, the output is
-scaled so that it still reaches exactly 0 % and 100 % at the stops. The maths and some tuning tips are in
-[docs/how-it-works.md](docs/how-it-works.md).
 
 ## 📐 Specifications
 
@@ -100,13 +78,6 @@ scaled so that it still reaches exactly 0 % and 100 % at the stops. The maths an
 ## 🧾 Bill of materials
 
 ### Printed parts (21 files, 22 pieces)
-
-The quantity is in each file name (`_x2` means print it twice). The same files are on
-<!-- TODO: replace with the MakerWorld model URL -->
-[MakerWorld](https://makerworld.com/),
-[Printables](https://www.printables.com/model/1512300-vernier-throttle-for-flight-sim) and
-<!-- TODO: replace with the Thingiverse thing URL -->
-[Thingiverse](https://www.thingiverse.com/).
 
 | | File | Qty | Role |
 |:-:|---|:-:|---|
@@ -131,15 +102,6 @@ The quantity is in each file name (`_x2` means print it twice). The same files a
 | <img src="docs/images/parts/Clamp_Pad.png" width="80"> | [`Clamp_Pad_x1.stl`](hardware/stl/Clamp_Pad_x1.stl) | 1 | Pad that presses on the desk |
 | <img src="docs/images/parts/Clamp_Swivel_Disc.png" width="80"> | [`Clamp_Swivel_Disc_x1.stl`](hardware/stl/Clamp_Swivel_Disc_x1.stl) | 1 | Disc on the tip of the screw, turns freely inside the pad |
 | <img src="docs/images/parts/Clamp_Pad_Cover.png" width="80"> | [`Clamp_Pad_Cover_x1.stl`](hardware/stl/Clamp_Pad_Cover_x1.stl) | 1 | Closes the disc inside the pad |
-
-**Printing.** The two shells are 270 mm long: on a 256 × 256 mm bed, they fit diagonally. Print the
-rack and the pinion with a fine layer height for a smooth mesh. A ready-to-print Bambu Studio project for
-the Bambu Lab P2S will be added to [`hardware/3mf/`](hardware/3mf).
-
-**CAD.** The full Fusion assembly is available as STEP:
-[`Vernier_Throttle_V1.step`](hardware/step/Vernier_Throttle_V1.step) (the throttle, with the rod,
-potentiometer, Arduino Micro and AS5600 board) and
-[`Vernier_Throttle_Support.step`](hardware/step/Vernier_Throttle_Support.step) (the desk clamp).
 
 ### Mechanical hardware
 
@@ -245,20 +207,11 @@ diametric magnet (red / blue).
 
 - Glue the `Knob` on the front end of the rod.
 
-### Step 10: Mount it on the desk
-
-- Slide the desk edge into the clamp, between the lower jaw and the pad, with the knob towards you.
-- Tighten the thumb screw, plug in the USB cable and bind the throttle axis in your simulator.
-
 ## 🔌 Electronics and firmware
 
-| From | To (Arduino Micro) |
-|---|---|
-| Potentiometer wiper | **A5** |
-| Potentiometer ends | 5V and GND (swap them if the axis is reversed) |
-| AS5600 VCC / GND | 5V / GND (check the voltage your board expects) |
-| AS5600 SDA / SCL | **D2** (SDA) / **D3** (SCL) |
-| AS5600 DIR | GND (do not leave it floating) |
+<p align="center">
+  <img src="docs/images/wiring.svg" width="780" alt="Wiring diagram: AS5600 SDA to D2, SCL to D3, GND and DIR to GND, VCC to 5V; potentiometer ends to 5V and GND, wiper to A5">
+</p>
 
 The firmware is a [PlatformIO](https://platformio.org/) project in [`firmware/`](firmware):
 
